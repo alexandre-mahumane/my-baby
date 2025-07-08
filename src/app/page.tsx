@@ -195,7 +195,6 @@ export default function ApologyPage() {
   // Arrays de mídia
   // const hero = ['/us14.jpeg', '/usBaia.jpeg']
   const photos = [
-    '/ela1.mp4',
     '/aDormir.jpeg',
     '/elaSeria.jpeg',
     '/guerreira.jpeg',
@@ -313,8 +312,6 @@ export default function ApologyPage() {
     }
 
     if (audioRef.current) {
-      setMusicChanged(!musicChanged)
-
       try {
         audioRef.current.currentTime = 30
         await audioRef.current.play()
@@ -380,13 +377,16 @@ export default function ApologyPage() {
 
               <button
                 onClick={startExperience}
+                ref={(el) => {
+                  sectionsRef.current['first-meet'] = el
+                }}
                 className="group bg-gradient-to-r from-pink-500 via-red-500 to-purple-500 text-white px-8 sm:px-12 py-4 sm:py-6 rounded-full text-lg sm:text-xl font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:shadow-pink-500/50 animate-pulse-slow border-2 border-white/20 backdrop-blur-sm"
               >
                 <Heart
                   className="inline mr-3 group-hover:animate-heartbeat"
                   size={24}
                 />
-                Começar Nossa História
+                Começar
                 <Sparkles
                   className="inline ml-3 group-hover:animate-spin"
                   size={20}
