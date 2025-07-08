@@ -187,7 +187,6 @@ export default function ApologyPage() {
   const [currentSection, setCurrentSection] = useState('')
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
   const [typewriterText, setTypewriterText] = useState('')
-  const [musicChanged, setMusicChanged] = useState(true)
   const [showHero, setShowHero] = useState(true)
   const heroVideoRef = useRef<HTMLVideoElement>(null)
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({})
