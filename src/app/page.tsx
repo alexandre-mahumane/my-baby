@@ -193,7 +193,7 @@ export default function ApologyPage() {
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({})
 
   // Arrays de mídia
-  const hero = ['/us14.jpeg', '/usBaia.jpeg']
+  // const hero = ['/us14.jpeg', '/usBaia.jpeg']
   const photos = [
     '/ela1.mp4',
     '/aDormir.jpeg',
@@ -457,8 +457,9 @@ export default function ApologyPage() {
 
                 <div className="bg-gradient-to-r from-white/10 to-pink-500/10 p-4 sm:p-6 rounded-2xl backdrop-blur-md border border-white/20 hover:border-pink-300/50 transition-all duration-300">
                   <p className="text-base sm:text-lg italic text-pink-200 font-light">
-                    "O amor verdadeiro acontece em um instante, mas dura para
-                    sempre."
+                    {
+                      "'O amor verdadeiro acontece em um instante, mas dura para sempre.'"
+                    }
                   </p>
                 </div>
               </div>
