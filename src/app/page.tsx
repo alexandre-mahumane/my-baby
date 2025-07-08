@@ -285,7 +285,11 @@ export default function ApologyPage() {
   const startExperience = async () => {
     setShowHero(false)
 
-    // Iniciar a música principal imediatamente
+    // Marcar a primeira seção como visível para garantir animações
+    setVisibleSections((prev) => new Set([...prev, 'first-meet']))
+    setCurrentSection('first-meet')
+
+    // Iniciar a música principal
     if (audioRef.current) {
       try {
         audioRef.current.currentTime = 30
@@ -293,7 +297,6 @@ export default function ApologyPage() {
         await audioRef.current.play()
       } catch (error) {
         console.log('Audio play failed:', error)
-        // Fallback para interação do usuário
         document.addEventListener(
           'click',
           () => {
@@ -306,10 +309,17 @@ export default function ApologyPage() {
       }
     }
 
-    // Iniciar a música da primeira seção
-    setTimeout(() => {
-      changeSectionMusic('first-meet')
-    }, 500)
+    // Iniciar a música da primeira seção imediatamente
+    const firstAudio = sectionAudioRefs.current['first-meet']
+    if (firstAudio) {
+      try {
+        firstAudio.currentTime = 30
+        firstAudio.volume = 0.7
+        await firstAudio.play()
+      } catch (error) {
+        console.log('Failed to play first-meet music:', error)
+      }
+    }
 
     // Iniciar o vídeo do herói
     if (heroVideoRef.current) {
@@ -343,7 +353,7 @@ export default function ApologyPage() {
           }}
           loop
         >
-          <source src={musicSrc} type="audio/mpeg" />
+          <source src={musicSrc || './tempo.mp3'} type="audio/mpeg" />
         </audio>
       ))}
 
@@ -406,6 +416,50 @@ export default function ApologyPage() {
           showHero ? 'opacity-0' : 'opacity-100'
         }`}
       >
+        <section
+          ref={(el) => {
+            sectionsRef.current['funny-.'] = el
+          }}
+          id="funny-moments"
+          className=" min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 py-10 sm:py-20 relative flex flex-col justify-center overflow-hidden"
+        >
+          {/* Indicador musical da seção */}
+          <div className="hidden absolute top-4 sm:top-8 left-4 sm:left-8 bg-white/20 backdrop-blur-md rounded-full px-3 sm:px-4 py-2 text-white flex items-center gap-2 border border-white/10 z-20">
+            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+            <span className="text-xs sm:text-sm font-medium">Viçio</span>
+          </div>
+
+          <div className="container mx-auto px-4 sm:px-6">
+            <div
+              className={`text-center mb-8 sm:mb-16 transition-all duration-1000 ${
+                visibleSections.has('funny-moments')
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-20'
+              }`}
+            >
+              <div className="flex items-center justify-center mb-4 sm:mb-6">
+                <MessageCircle
+                  className="text-yellow-400 mr-3 sm:mr-4 animate-bounce"
+                  size={28}
+                />
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent"></h2>
+              </div>
+              <p className="text-base sm:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto font-light">
+                Espero que gostes!!!
+              </p>
+            </div>
+
+            <div
+              className={`transition-all duration-1000 delay-300 ${
+                visibleSections.has('funny-moments')
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-20'
+              }`}
+            >
+              {/* <MediaCarousel items={funnyMoments} /> */}
+            </div>
+          </div>
+        </section>
         {/* Seção 1: Quando nos conhecemos - USANDO ARRAY PHOTOS */}
         <section
           ref={(el) => {
