@@ -192,7 +192,6 @@ export default function ApologyPage() {
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({})
 
   // Arrays de mídia
-  // const hero = ['/us14.jpeg', '/usBaia.jpeg']
   const photos = [
     '/aDormir.jpeg',
     '/elaSeria.jpeg',
@@ -239,10 +238,9 @@ export default function ApologyPage() {
   }, [currentSection])
 
   const changeSectionMusic = async (sectionId: string) => {
-    if (audioRef.current) audioRef.current.pause()
-
+    // Pausar todas as músicas primeiro
     Object.values(sectionAudioRefs.current).forEach((audio) => {
-      if (audio && !audio.paused) {
+      if (audio) {
         audio.pause()
         audio.currentTime = 0
       }
@@ -284,39 +282,41 @@ export default function ApologyPage() {
     return () => observer.disconnect()
   }, [])
 
-  useEffect(() => {
-    const playMainAudio = async () => {
-      if (audioRef.current) {
-        try {
-          audioRef.current.currentTime = 30
-          await audioRef.current.play()
-          audioRef.current.muted = false
-        } catch (err) {
-          console.log('Autoplay failed:', err)
-        }
+  const startExperience = async () => {
+    setShowHero(false)
+
+    // Iniciar a música principal imediatamente
+    if (audioRef.current) {
+      try {
+        audioRef.current.currentTime = 30
+        audioRef.current.volume = 0.7
+        await audioRef.current.play()
+      } catch (error) {
+        console.log('Audio play failed:', error)
+        // Fallback para interação do usuário
+        document.addEventListener(
+          'click',
+          () => {
+            audioRef.current
+              ?.play()
+              .catch((e) => console.log('Still failed:', e))
+          },
+          { once: true }
+        )
       }
     }
 
-    playMainAudio()
-  }, [])
+    // Iniciar a música da primeira seção
+    setTimeout(() => {
+      changeSectionMusic('first-meet')
+    }, 500)
 
-  const startExperience = async () => {
-    setShowHero(false)
+    // Iniciar o vídeo do herói
     if (heroVideoRef.current) {
       try {
         await heroVideoRef.current.play()
       } catch (error) {
         console.log('Video play failed:', error)
-      }
-    }
-
-    if (audioRef.current) {
-      try {
-        audioRef.current.currentTime = 30
-        await audioRef.current.play()
-        audioRef.current.muted = false
-      } catch (error) {
-        console.log('Audio play failed:', error)
       }
     }
   }
@@ -331,7 +331,7 @@ export default function ApologyPage() {
       <FloatingHearts />
       <TwinklingStars />
 
-      <audio ref={audioRef} loop muted>
+      <audio ref={audioRef} loop>
         <source src="/placeholder.mp3" type="audio/mpeg" />
       </audio>
 
